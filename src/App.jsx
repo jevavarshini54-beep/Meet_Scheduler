@@ -5,7 +5,6 @@ import Home from './pages/Home';
 import Space from './pages/Space';
 import MyMeetings from './pages/MyMeetings';
 
-
 function App() {
 
   const [currentUser, setCurrentUser] = useState(null);
@@ -13,6 +12,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login setCurrentUser={setCurrentUser} />}></Route>
+        <Route path="/home" element={<Home currentUser={currentUser} setCurrentUser={setCurrentUser} />}></Route>
       </Routes>
     </BrowserRouter>
   );

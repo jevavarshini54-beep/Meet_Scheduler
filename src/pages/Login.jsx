@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion'
+import './Login.css';
 
 function Login({setCurrentUser}){
 
@@ -50,17 +51,17 @@ function Login({setCurrentUser}){
 	}
 
 	return(
-		<div>
-			<h1 className='title'>{dispText}<span>|</span></h1>
+		<div className='container'>
+			<h1 className='title'>{dispText}</h1>
 			{showForm && (
-				<motion.div initial={{opacity: 0, y: 40, scale: 0.95}}
-					animate={{opacity: 1, y:0, scale: 1}} transition={{ease: "easeInOut", duration: 2}}>
+				<motion.div className='login_box' initial={{opacity: 0, y: 40, scale: 0.95}}
+					animate={{opacity: 1, y: -20, scale: 1}} transition={{ease: "easeInOut", duration: 2}}>
 					<h3>Enter your username to proceed</h3>
-					<input type="text" placeholder='Enter username...' value={username}
+					<input type="text" placeholder='Enter username...' value={username} className='name'
 						onKeyDown={(e) => e.key === 'Enter' && handleLogin()} onChange={(e) => setUsername(e.target.value)} />
-					<button onClick={handleLogin}>Click to proceed</button>
+					<motion.button onClick={handleLogin} whileHover={{scale: 1.08, y: -3}} whileTap={{scale: 0.95}}><h3>Click to proceed</h3></motion.button>
 
-					{message && <p>{message}</p>}
+					{message && <p className='invalid_name'>{message}</p>}
 				</motion.div>
 			)}
 		</div>
