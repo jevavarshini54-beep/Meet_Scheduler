@@ -18,6 +18,13 @@ const io = new Server(server, {cors: {origin : '*'}});
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB connected'))
     .catch((err) => console.log("error : ",err));
+
+const userRoutes = require('./routes/users');
+const spaceRoutes = require('./routes/spaces');
+
+app.use('/routes/users', userRoutes);
+app.use('/routes/spaces', spaceRoutes);
+
 app.get('/', (req, res) => {
   res.send('Meeting Scheduler backend is running!');
 });

@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const { use } = require('react');
 
 //Sending username to server
-router.post('/login', async (requestAnimationFrame,res) => {
+router.post('/login', async (req,res) => {
   try{
 		const {username} = req.body;
 
@@ -25,10 +24,16 @@ router.post('/login', async (requestAnimationFrame,res) => {
 		//username not existing
 		user = new User({username : cleanUsername});
 		await user.save();
-		return res.status(201).json({message : "Account created"});
+		return res.status(201).json({message : "Account created", user});
   }
 
 	catch(err){
 		res.status(500).json({message : "Can't login"})
 	}
 });
+
+router.post('/logout', (req, res) => {
+  res.status(200).json({ message: 'Logged out successfully' });
+});
+
+module.exports = router;
