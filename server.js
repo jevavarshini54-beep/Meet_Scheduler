@@ -22,8 +22,10 @@ mongoose.connect(process.env.MONGO_URI)
 const userRoutes = require('./routes/users');
 const spaceRoutes = require('./routes/spaces');
 
-app.use('/routes/users', userRoutes);
-app.use('/routes/spaces', spaceRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/spaces', spaceRoutes);
+
+console.log('Routes loaded!');
 
 app.get('/', (req, res) => {
   res.send('Meeting Scheduler backend is running!');
