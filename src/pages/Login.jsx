@@ -12,7 +12,7 @@ function Login({setCurrentUser}){
 	
 	const fullText = "Meeting Scheduler";
 	const [dispText, setDispText] = useState('');
-	const [showForm, setShowForm] = useState('false');
+	const [showForm, setShowForm] = useState(false);
 	useEffect(() => {
 		let index = 0;
 		const timer = setInterval(() => {

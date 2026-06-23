@@ -1,0 +1,24 @@
+*{
+  margin: 0;
+	padding: 0;
+}
+
+body{
+	background: linear-gradient(160deg, #a8c8f8 0%, #c9b8f0 40%, #f0b8d8 100%);
+	min-height: 100vh;
+}
+
+.title {
+	color: #544c6c;
+	font-size: 4rem;
+}
+
+.buttons {
+	display: flex;
+	flex-direction: row;
+}
+
+.calendarGrid {
+	display: grid;
+	grid-template-columns: repeat(7,2.2rem);
+}
