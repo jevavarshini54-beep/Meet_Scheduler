@@ -41,6 +41,11 @@ function Home({currentUser, setCurrentUser}) {
 		return Date(date.getFullYear(), date.getFullMonth(), 1).getDate();
 	}
 
+	const hasMeeting = (date) => {
+		return meetings.some(m => {
+			const d = new Date(m.startTime);
+		})
+	}
   return(
     <h1>Home</h1>
   );
