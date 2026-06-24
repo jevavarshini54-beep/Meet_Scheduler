@@ -6,12 +6,26 @@ import MyMeetings from './pages/MyMeetings';
 
 function App() {
 
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(
+    JSON.parse(sessionStorage.getItem('user')) || null
+  );
+
+  // Update setCurrentUser calls
+  const handleLogin = (user) => {
+    sessionStorage.setItem('user', JSON.stringify(user));
+    setCurrentUser(user);
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('user');
+    setCurrentUser(null);
+  };
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login setCurrentUser={setCurrentUser} />}></Route>
-        <Route path="/home" element={<Home currentUser={currentUser} setCurrentUser={setCurrentUser} />}></Route>
+        <Route path="/" element={<Login setCurrentUser={handleLogin} />}></Route>
+        <Route path="/home" element={currentUser ? <Home currentUser={currentUser} setCurrentUser={setCurrentUser} /> : <Navigate to='/' />}></Route>
       </Routes>
     </BrowserRouter>
   );

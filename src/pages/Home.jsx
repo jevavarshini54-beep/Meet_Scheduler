@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IconTrash, IconPlus, IconConnection } from "@tabler/icons-react";
+import { IconTrash, IconPlus, IconConnection, IconArrowBack } from "@tabler/icons-react";
 import axios from 'axios';
 import './Home.css';
 
 function Home({currentUser, setCurrentUser}) {
 
+	console.log('currentUser:', currentUser);
 	const navigate = useNavigate();
 	const [meetings, setMeetings] = useState([]);
 	const [spaces, setSpaces] = useState([]);
@@ -18,7 +19,7 @@ function Home({currentUser, setCurrentUser}) {
 
 	const fetchMeetings = async () => {
 		try{
-			const res = await axios.get(`/api/meetings/user/${currentUser._id}`);
+			const res = await axios.get(`http://localhost:5000/api/meetings/user/${currentUser._id}`);
 			setMeetings(res.data.meetings);
 		}
 
@@ -30,7 +31,7 @@ function Home({currentUser, setCurrentUser}) {
 	// meeting spaces users are a part of
 	const fetchSpaces = async () => {
 		try{
-			const res = await axios.get(`/api/spaces/user/${currentUser._id}`);
+			const res = await axios.get(`http://localhost:5000/api/spaces/user/${currentUser._id}`);
 			setSpaces(res.data.spaces);
 		}
 
@@ -38,6 +39,11 @@ function Home({currentUser, setCurrentUser}) {
 			console.log("Error in finding spaces : ", err);
 		}
 	};
+
+	useEffect(() => {
+  	fetchMeetings();
+  	fetchSpaces();
+	}, []);
 
 	const getDaysInMonth = (date) => {
 		return new Date(date.getFullYear(), date.getMonth()+1, 0).getDate();
@@ -88,87 +94,99 @@ function Home({currentUser, setCurrentUser}) {
   return(
 		<div>
 			<div>
-				<div className='title'>Meeting Scheduler</div>
-				<button className='logoutBtn' onClick={handleLogout}>Logout</button>
-				<h1>{currentUser?.username}</h1>
-				<AnimatePresence>
-					{showCalendar && (
-					<div>
-						<div className='buttons'>
-							<button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth()-1, ))}>‹</button>
-							<span>{monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}</span>
-							<button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth()+1, ))}>‹</button>
-						</div>
-						
-						<div className='calendarGrid'>
-							{dayNames.map(d => (
-								<div>{d}</div>
-							))}
-
-							{/* empty cells */}
-							{Array(firstDay).fill(null).map((_, i) => (<div></div>))}
-							{Array(daysInMonth).fill(null).map((_, i) => {
-								const day = i+1;
-								const hasMeet = hasMeeting(day);
-								const isTod = isToday(day);
-								return (
-									<div onClick={() => handleDayClick(day)}>{day}</div>
-								)
-							})}
-						</div>
-					</div>
-					)}
-
-					{!showCalendar && (
-						<div>
-							<button onClick={handleBack}>←</button>
-
-							{getMeetingsForDate(selectedDate).length === 0 ? (
-								<p>No meetings for this day</p>
-							) : (
-								getMeetingsForDate(selectedDate).map(m => (
-									<div>
-										<p>{m.title}</p>
-										<p>{new Date(m.startTime).toLocaleDateString()} •{' '}
-										{new Date(m.startTime).toLocaleDateString([], {hour: '2-digit', minute: '2-digit'})} •{' '}
-										{m.duration} mins</p>
-										{m.description && <p>{m.description}</p>}
-										<p>{m.createdBy?.username}</p>
-
-									{/* only the creator sees the delete button*/}
-									{m.createdBy?._id === currentUser._id && (
-										<IconTrash size={20}></IconTrash>
-									)}
-									</div>
-								))
-							)}
-						</div>
-					)}
-				</AnimatePresence>
+				<div className='navbar'>
+					<h1 className='title'>Meeting Scheduler</h1>
+					<motion.button className='logoutBtn' onClick={handleLogout} whileHover={{y: 3, x: -3, opacity: 0.9}} whileTap={{y: 0, x: -3, opacity: 0.83}}>Logout</motion.button>
+				</div>
+				<h1 className='user_name'>Hi, {currentUser?.username}</h1>
 			</div>
+			
+			<div className='left_right'>
+				<AnimatePresence>
+					<div className='left_cont'>
+						{showCalendar && (
+						<div>
+							<div className='buttons'>
+								<motion.button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth()-1, ))}
+									whileHover={{scale: 1.08}} whileTap={{scale: 1.08}}>‹</motion.button>
+								<h1>{monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}</h1>
+								<motion.button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth()+1, ))}
+									whileHover={{scale: 1.08}} whileTap={{scale: 1.08}}>›</motion.button>
+							</div>
+							
+							<div className='calendarGrid'>
+								{dayNames.map(d => (
+									<div key={d} className='days'>{d}</div>
+								))}
 
-			<div>
-				<button>
-					<IconPlus size={20} />
-					<h4>Create meeting space</h4>
-				</button>
-
-				<button>
-					<IconConnection size={20} />
-					<h4>Join space</h4>
-				</button>
-
-				<h3>Your Spaces</h3>
-				{spaces.length === 0 ? (
-					<p>No spaces yet!</p>
-				) : (
-					spaces.map((space, i) => (
-						<div onClick={() => navigate(`/space/${space._id}`)}>
-							<p>{space.name}</p>
-							<p>{space.code}</p>
+								{/* empty cells */}
+								{Array(firstDay).fill(null).map((_, i) => (<div key={`empty-${i}`}></div>))}
+								{Array(daysInMonth).fill(null).map((_, i) => {
+									const day = i+1;
+									const hasMeet = hasMeeting(day);
+									const isTod = isToday(day);
+									return (
+										<div onClick={() => handleDayClick(day)} className={`dates ${hasMeet ? 'hasMeeting' : ''} ${isTod ? 'today' : ''}`} key={day}>{day}</div>
+									)
+								})}
+							</div>
 						</div>
-					))
-				)}
+						)}
+
+						{!showCalendar && (
+							<div className='your_meets'>
+								<button onClick={handleBack} className='back_btn'><IconArrowBack size={20} /></button>
+
+								{getMeetingsForDate(selectedDate).length === 0 ? (
+									<div className='no_meet'>No meetings for this day</div>
+								) : (
+									getMeetingsForDate(selectedDate).map(m => (
+										<div>
+											<p>{m.title}</p>
+											<p>{new Date(m.startTime).toLocaleDateString()} •{' '}
+											{new Date(m.startTime).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})} •{' '}
+											{m.duration} mins</p>
+											{m.description && <p>{m.description}</p>}
+											<p>{m.createdBy?.username}</p>
+
+										{/* only the creator sees the delete button*/}
+										{m.createdBy?._id === currentUser._id && (
+											<IconTrash size={20}></IconTrash>
+										)}
+										</div>
+									))
+								)}
+							</div>
+						)}
+					</div>
+				</AnimatePresence>
+
+				<div className='right_cont'>
+
+					<div className='right_cont_btns'>
+						<button>
+							<IconPlus size={10} />
+							<h4>Create meeting space</h4>
+						</button>
+
+						<button>
+							<IconConnection size={20} />
+							<h4>Join space</h4>
+						</button>
+					</div>
+
+					<h3>Your Spaces</h3>
+					{spaces.length === 0 ? (
+						<p>No spaces yet!</p>
+					) : (
+						spaces.map((space, i) => (
+							<div onClick={() => navigate(`/space/${space._id}`)}>
+								<p>{space.name}</p>
+								<p>{space.code}</p>
+							</div>
+						))
+					)}
+				</div>
 			</div>
 		</div>
   );
