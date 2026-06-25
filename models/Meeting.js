@@ -25,7 +25,7 @@ const meetingSchema = new mongoose.Schema({
 		type: Number,
 		required: true // in mins
 	},
-
+co
 	spaceId: {
 		type: mongoose.Schema.Types.ObjectId,
     ref: 'Space',
