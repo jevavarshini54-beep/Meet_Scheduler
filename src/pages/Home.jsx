@@ -1,11 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { IconTrash, IconPlus, IconConnection, IconArrowBack } from "@tabler/icons-react";
+import { motion, AnimatePresence, spring } from 'framer-motion';
+import { IconTrash, IconArrowBack } from "@tabler/icons-react";
 import axios from 'axios';
 import './Home.css';
 
 function Home({currentUser, setCurrentUser}) {
+
+	const [spaceName, setSpaceName] = useState('');
+	const [spaceCode, setSpaceCode] = useState('');
+	const [message, setMessage] = useState('');
+	const [showCreateModal, setShowCreateModal] = useState(false);
+	const [showJoinModal, setShowJoinModal] = useState(false);
+
+
+
+	const handleCreateSpace = async () => {
+		if (!spaceName.trim()) {
+			setMessage('Enter space name');
+			return;
+		}
+
+		try{
+			const res = await axios.post('http://localhost:5000/api/spaces/create', {
+				name: spaceName.trim(),
+				userId : currentUser._id
+			});
+			setSpaces([...spaces, res.data.space]);
+			setShowCreateModal(false);
+			setSpaceName('');
+    	setMessage('');
+		}
+
+		catch(err){
+			setMessage("Something went wrong");
+		}
+	};
 
 	console.log('currentUser:', currentUser);
 	const navigate = useNavigate();
@@ -50,7 +80,7 @@ function Home({currentUser, setCurrentUser}) {
 	};
 
 	const getFirstDayOfMonth = (date) => {
-		return new Date(date.getFullYear(), date.getMonth(), 1).getDate();
+		return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
 	}
 
 	const hasMeeting = (date) => {
@@ -126,7 +156,9 @@ function Home({currentUser, setCurrentUser}) {
 									const hasMeet = hasMeeting(day);
 									const isTod = isToday(day);
 									return (
-										<div onClick={() => handleDayClick(day)} className={`dates ${hasMeet ? 'hasMeeting' : ''} ${isTod ? 'today' : ''}`} key={day}>{day}</div>
+										<motion.div onClick={() => handleDayClick(day)} className={`dates ${hasMeet ? 'hasMeeting' : ''} ${isTod ? 'today' : ''}`} key={day}
+											whileHover={{scale: 0.95, filter: "blur(0.3px)", transition: {type: "spring", stiffness: 200, damping: 17}}}
+											whileTap={{scale: 0.95, filter: "blur(1.4px)", transition: {type: "spring", stiffness: 200, damping: 17}}}>{day}</motion.div>
 									)
 								})}
 							</div>
@@ -164,15 +196,14 @@ function Home({currentUser, setCurrentUser}) {
 				<div className='right_cont'>
 
 					<div className='right_cont_btns'>
-						<button>
-							<IconPlus size={10} />
-							<h4>Create meeting space</h4>
-						</button>
+						<motion.button whileHover={{scale: 1.09, opacity: 0.7, y: 3, transition: {type: "spring", stiffness: 300, damping: 20, duration: 0.5}}}
+							onClick={() => setShowCreateModal(true)}>
+							<h4>Create space</h4>
+						</motion.button>
 
-						<button>
-							<IconConnection size={20} />
+						<motion.button whileHover={{scale: 1.09, opacity: 0.7, y: 3, transition: {type: "spring", stiffness: 300, damping: 20, duration: 0.5}}}>
 							<h4>Join space</h4>
-						</button>
+						</motion.button>
 					</div>
 
 					<h3>Your Spaces</h3>
@@ -186,6 +217,16 @@ function Home({currentUser, setCurrentUser}) {
 							</div>
 						))
 					)}
+
+					{showCreateModal && 
+						<div>
+							<input type="text" placeholder='Meet-Space name...' value={spaceName}
+								onChange={(e) => setSpaceName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleCreateSpace} />
+								{message && <p className='message'>{message}</p>}
+								<button onClick={handleCreateSpace}>Create</button>
+								<button onClick={() => {setShowCreateModal(false); setMessage('')}}>Cancel</button>
+						</div>
+					}
 				</div>
 			</div>
 		</div>
