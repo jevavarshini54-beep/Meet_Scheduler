@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence, spring } from 'framer-motion';
+import { motion, AnimatePresence, spring, color } from 'framer-motion';
 import { IconTrash, IconArrowBack } from "@tabler/icons-react";
 import axios from 'axios';
 import './Home.css';
@@ -194,12 +194,12 @@ function Home({currentUser, setCurrentUser}) {
 								) : (
 									getMeetingsForDate(selectedDate).map(m => (
 										<div>
-											<p>{m.title}</p>
-											<p>{new Date(m.startTime).toLocaleDateString()} •{' '}
+											<p>Title : {m.title}</p>
+											<p>Details : {new Date(m.startTime).toLocaleDateString()} •{' '}
 											{new Date(m.startTime).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})} •{' '}
 											{m.duration} mins</p>
-											{m.description && <p>{m.description}</p>}
-											<p>{m.createdBy?.username}</p>
+											{m.description && <p>Description : {m.description}</p>}
+											<p>Organised By : {m.createdBy?.username}</p>
 
 										{/* only the creator sees the delete button*/}
 										{m.createdBy?._id === currentUser._id && (
@@ -241,22 +241,30 @@ function Home({currentUser, setCurrentUser}) {
 					)}
 
 					{showCreateModal &&  
-						<div className='space_info'>
-							<input type="text" placeholder='Meet-Space name...' value={spaceName} className='input_box'
-								onChange={(e) => setSpaceName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleCreateSpace} />
-							{message && <p className='message'>{message}</p>}
-							<button onClick={handleCreateSpace}>Create</button>
-							<button onClick={() => {setShowCreateModal(false); setMessage('')}}>Cancel</button>
+						<div className='overlay'>
+							<div className='space_info'>
+								<input type="text" placeholder='Space name' value={spaceName} className='input_box'
+									onChange={(e) => setSpaceName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleCreateSpace} />
+								{message && <p className='message'>{message}</p>}
+								<div className='space_buttons'>
+									<motion.button onClick={handleCreateSpace} whileHover={{scale: 1.06, opacity: 0.96}} whileTap={{scale: 1.06, opacity: 0.96}}>Create</motion.button>
+									<motion.button onClick={() => {setShowCreateModal(false); setMessage('')}} whileHover={{scale: 1.06, opacity: 0.96}} whileTap={{scale: 1.06, opacity: 0.96}}>Cancel</motion.button>
+								</div>
+							</div>
 						</div>
 					}
 
-					{showJoinModal &&
-						<div>
-							<input type="text" placeholder='Space code' value={spaceCode} className='input_box'
-								onChange={(e) => setSpaceCode(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleJoinSpace}/>
-							{message && <p className='message'>{message}</p>}
-							<button onClick={() => handleJoinSpace()}>Join</button>
-      						<button onClick={() => {setShowJoinModal(false); setMessage('')}}>Cancel</button>
+					{showJoinModal &&	
+						<div className='overlay'>
+							<div className='space_info'>
+								<input type="text" placeholder='Space code' value={spaceCode} className='input_box'
+									onChange={(e) => setSpaceCode(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleJoinSpace}/>
+								{message && <p className='message'>{message}</p>}
+								<div className='space_buttons'>
+									<motion.button onClick={() => handleJoinSpace()} whileHover={{scale: 1.06, opacity: 0.96}} whileTap={{scale: 1.06, opacity: 0.96}}>Join</motion.button>
+									<motion.button onClick={() => {setShowJoinModal(false); setMessage('')}} whileHover={{scale: 1.06, opacity: 0.96}} whileTap={{scale: 1.06, opacity: 0.96}}>Cancel</motion.button>
+								</div>
+							</div>
 						</div>
 					}
 				</div>
