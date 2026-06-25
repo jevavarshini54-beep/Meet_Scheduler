@@ -8,7 +8,8 @@ const User = require('../models/User')
 router.post('/create', async (req,res) => {
 	try{
 		const {title, description, startTime, duration, spaceId, userId} = req.body;
-		if (!title, description, startTime, duration, spaceId, userId){
+		console.log('Received meeting data:', {title, description, startTime, duration, spaceId, userId});
+		if (!title || !startTime|| !duration || !spaceId || !userId){
 			return res.status(400).json({messgae : "All fields are required"});
 		}
 
@@ -17,7 +18,8 @@ router.post('/create', async (req,res) => {
       return res.status(404).json({message : "Space not found"});
     }
 
-    if (!space.members.includes(userId)) {
+	const isMember = space.members.some(m => m.toString() === userId)
+    if (!isMember) {
       return res.status(403).json({message : "You are not a member of this space"});
     }
 
@@ -26,11 +28,11 @@ router.post('/create', async (req,res) => {
 			spaceId, createdBy: userId
 		});
 		await meeting.save();
-		res.status(201).json({message : "Meeting created!"});
+		res.status(201).json({message : "Meeting created!", meeting});
 	}
 
 	catch(err){
-		res.status(500).json({messgae : "Something went wrong"});
+		res.status(500).json({message : "Something went wrong"});
 	}
 });
 
@@ -55,7 +57,7 @@ router.delete('/:id', async (req,res) => {
 		const meeting = await Meeting.findById(req.params.id);
 
 		if (!meeting){
-			res.status(404).json({message : "Meeting not found"});
+		return res.status(404).json({message : "Meeting not found"});
 		}
 
 		//only creator can delete
@@ -68,13 +70,13 @@ router.delete('/:id', async (req,res) => {
 	}
 
 	catch(err){
-		res.status(200).json({message : "Something went wrong"});
+		res.status(500).json({message : "Something went wrong"});
 	}
 });
 
-router.get('/user/userId', async (req,res) => {
+router.get('/user/:userId', async (req,res) => {
 	try{
-		const user = User.findById(req.params.userId).populate('spaces');
+		const user = await User.findById(req.params.userId).populate('spaces');
 		if (!user){
 			return res.status(404).json({message : "User not found"});
 		}
@@ -89,7 +91,8 @@ router.get('/user/userId', async (req,res) => {
 	}
 
 	catch(err){
-		res.status.json({message : "Something went wrong"});
+		console.error('Meeting fetch error:', err);
+		res.status(500).json({message : "Something went wrong"});
 	}
 });
 

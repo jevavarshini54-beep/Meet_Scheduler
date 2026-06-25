@@ -21,9 +21,11 @@ mongoose.connect(process.env.MONGO_URI)
 
 const userRoutes = require('./routes/users');
 const spaceRoutes = require('./routes/spaces');
+const meetingRoutes = require('./routes/meetings');
 
 app.use('/api/users', userRoutes);
 app.use('/api/spaces', spaceRoutes);
+app.use('/api/meetings', meetingRoutes);
 
 console.log('Routes loaded!');
 

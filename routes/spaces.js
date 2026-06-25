@@ -12,10 +12,10 @@ router.post('/create', async (req,res) => {
 		}
 
 		const space = new Space({
-      name,
-      createdBy: userId,
-      members: [userId]  //creator is automatically a member
-    });
+      		name,
+      		createdBy: userId,
+      		members: [userId]  //creator is automatically a member
+    	});
 		await space.save();
 
 		await User.findByIdAndUpdate(userId, {
