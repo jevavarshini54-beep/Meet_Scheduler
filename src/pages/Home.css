@@ -211,3 +211,11 @@ body{
 .space_box span {
 	color: #0e4444;
 }
+
+.input_box {
+	font-size: 1.4rem;
+	background: linear-gradient(160deg, #a8c8f8 0%, #c9b8f0 40%, #f0b8d8 100%);
+	padding: 2.6px;
+	border-radius: 0.4rem;
+	border: 1.2px solid rgb(255, 255, 255,0.9);
+}

@@ -241,22 +241,22 @@ function Home({currentUser, setCurrentUser}) {
 					)}
 
 					{showCreateModal &&  
-						<div>
-							<input type="text" placeholder='Meet-Space name...' value={spaceName}
+						<div className='space_info'>
+							<input type="text" placeholder='Meet-Space name...' value={spaceName} className='input_box'
 								onChange={(e) => setSpaceName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleCreateSpace} />
-								{message && <p className='message'>{message}</p>}
-								<button onClick={handleCreateSpace}>Create</button>
-								<button onClick={() => {setShowCreateModal(false); setMessage('')}}>Cancel</button>
+							{message && <p className='message'>{message}</p>}
+							<button onClick={handleCreateSpace}>Create</button>
+							<button onClick={() => {setShowCreateModal(false); setMessage('')}}>Cancel</button>
 						</div>
 					}
 
 					{showJoinModal &&
 						<div>
-							<input type="text" placeholder='Space code' value={spaceCode}
+							<input type="text" placeholder='Space code' value={spaceCode} className='input_box'
 								onChange={(e) => setSpaceCode(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleJoinSpace}/>
 							{message && <p className='message'>{message}</p>}
 							<button onClick={() => handleJoinSpace()}>Join</button>
-      				<button onClick={() => {setShowJoinModal(false); setMessage('')}}>Cancel</button>
+      						<button onClick={() => {setShowJoinModal(false); setMessage('')}}>Cancel</button>
 						</div>
 					}
 				</div>
