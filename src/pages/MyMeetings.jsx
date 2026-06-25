@@ -11,6 +11,13 @@ function MyMeetings({currentUser}) {
   const [space, setSpace] = useState(null);
 	const [meetings, setMeetings] = useState(null);
 	const [loading, setLoading] = useState(true);
+	const [message, setMessage] = useState('');
+
+	const [title, setTitle] = useState('');
+	const [description, setDescription] = useState('');
+	const [date, setDate] = useState('');
+	const [time, setTime] = useState('');
+	const [duration, setDuration] = useState('');
 
   const fetchSpace = async() => {
 		try{
@@ -42,6 +49,35 @@ function MyMeetings({currentUser}) {
 		};
 		loadAll();
 	},[id]);
+
+	const handleCreateMeeting = async() => {
+		if (!title.trim() || !duration || !date || !time){
+			setMessage("Title, date, time and duration are required");
+			return;
+		}
+		const startTime = new Date(`${date}T${time}`);
+
+		try{
+			const res = axios.post('http://localhost:5000/api/meetings/create',{
+				title: title.trim(),
+				description: description.trim(),
+				startTime, duration: Number(duration),
+				spaceId: id, userId: currentUser._id
+			});
+
+			setMeetings([...meetings, res.data.meetings]);
+			setTitle('');
+			setDescription('');
+			setDuration('');
+			setTime('');
+			setDate('');
+			setMessage('');
+		}
+
+		catch(err){
+			setMessage(err.response?.data?.message || "Something went wrong");
+		}
+	};
 
   return(
     <h1>MyMeetings</h1>
