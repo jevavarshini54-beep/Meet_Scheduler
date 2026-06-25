@@ -13,7 +13,27 @@ function Home({currentUser, setCurrentUser}) {
 	const [showCreateModal, setShowCreateModal] = useState(false);
 	const [showJoinModal, setShowJoinModal] = useState(false);
 
+	const handleJoinSpace = async () => {
+		if (!spaceCode.trim()) {
+			setMessage('Enter meet code');
+			return;
+		}
 
+		try{
+			const res = await axios.post('http://localhost:5000/api/spaces/join_meetspace', {
+				userId : currentUser._id,
+				code : spaceCode.trim()
+			});
+			setSpaces([...spaces, res.data.space]);
+    	setShowJoinModal(false);
+    	setSpaceCode('');
+    	setMessage('');
+		}
+
+		catch(err){
+			setMessage(err.response?.data?.message || "Something went wrong");
+		}
+	}
 
 	const handleCreateSpace = async () => {
 		if (!spaceName.trim()) {
@@ -201,30 +221,42 @@ function Home({currentUser, setCurrentUser}) {
 							<h4>Create space</h4>
 						</motion.button>
 
-						<motion.button whileHover={{scale: 1.09, opacity: 0.7, y: 3, transition: {type: "spring", stiffness: 300, damping: 20, duration: 0.5}}}>
+						<motion.button whileHover={{scale: 1.09, opacity: 0.7, y: 3, transition: {type: "spring", stiffness: 300, damping: 20, duration: 0.5}}}
+							onClick={() => setShowJoinModal(true)}>
 							<h4>Join space</h4>
 						</motion.button>
 					</div>
 
-					<h3>Your Spaces</h3>
+					<div className='heading'>Your Spaces :</div>
 					{spaces.length === 0 ? (
-						<p>No spaces yet!</p>
+						<div className='no_space'>No spaces yet!</div>
 					) : (
 						spaces.map((space, i) => (
-							<div onClick={() => navigate(`/space/${space._id}`)}>
-								<p>{space.name}</p>
-								<p>{space.code}</p>
-							</div>
+							<motion.div onClick={() => navigate(`/space/${space._id}`)} className='space' key={space._id}
+								whileHover={{scale: 1.02, transition: {type: "spring", stiffness: 300, damping: 10}}}>
+								<div className='space_box'>• <span>Space Name : </span>{space.name} •</div>
+								<div className='space_box'>• <span>Space Code : </span>{space.code} •</div>
+							</motion.div>
 						))
 					)}
 
-					{showCreateModal && 
+					{showCreateModal &&  
 						<div>
 							<input type="text" placeholder='Meet-Space name...' value={spaceName}
 								onChange={(e) => setSpaceName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleCreateSpace} />
 								{message && <p className='message'>{message}</p>}
 								<button onClick={handleCreateSpace}>Create</button>
 								<button onClick={() => {setShowCreateModal(false); setMessage('')}}>Cancel</button>
+						</div>
+					}
+
+					{showJoinModal &&
+						<div>
+							<input type="text" placeholder='Space code' value={spaceCode}
+								onChange={(e) => setSpaceCode(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleJoinSpace}/>
+							{message && <p className='message'>{message}</p>}
+							<button onClick={() => handleJoinSpace()}>Join</button>
+      				<button onClick={() => {setShowJoinModal(false); setMessage('')}}>Cancel</button>
 						</div>
 					}
 				</div>

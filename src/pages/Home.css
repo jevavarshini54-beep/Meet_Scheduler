@@ -74,6 +74,7 @@ body{
 .left_cont{
 	padding-left: 1rem;
 	position: relative;
+	width: 43.4rem;
 }
 
 .buttons button{
@@ -170,4 +171,43 @@ body{
 	border: none;
 	font-size: 1.2rem;
 	color: #544c6c;
+}
+
+.no_space {
+	font-size: 1.3rem;
+	display: flex;
+	margin-top: 1.3rem;
+	justify-content: center;
+	color: #480b49;
+}
+
+.heading {
+	color: #304353;
+	margin: 1rem 1rem;
+	font-size: 1.5rem;
+	font-weight: 700;
+}
+
+.space {
+	border: 1px solid rgb(255, 255, 255,0.9);
+	border-radius: 0.7rem;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+	padding-left: 2rem;
+	padding-right: 2rem;
+	margin: 0.9rem;
+	display: inline-flex;
+	gap: 3rem;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.space_box {
+	color: #480b49;
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
+.space_box span {
+	color: #0e4444;
 }
