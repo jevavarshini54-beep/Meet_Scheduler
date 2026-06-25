@@ -2,6 +2,7 @@ import React, { useEffect, useEffectEvent, useState } from 'react'
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
+import { post } from '../../../Backend/routes/meetings';
 
 function MyMeetings({currentUser}) {
 
@@ -12,6 +13,7 @@ function MyMeetings({currentUser}) {
 	const [meetings, setMeetings] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [message, setMessage] = useState('');
+	const [showMeetingModal, setShowMeetingModal] = useState(false);
 
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
@@ -66,16 +68,32 @@ function MyMeetings({currentUser}) {
 			});
 
 			setMeetings([...meetings, res.data.meetings]);
+			setC
 			setTitle('');
 			setDescription('');
 			setDuration('');
 			setTime('');
 			setDate('');
 			setMessage('');
+
+			setShowMeetingModal(false);
 		}
 
 		catch(err){
 			setMessage(err.response?.data?.message || "Something went wrong");
+		}
+	};
+
+	const handleDeleteMeeting = async(meetingId) => {
+		try{
+			const res = await axios.delete(`http://localhost:5000/api/meetings/${meetingId}`,{
+				data: {userId: currentUser._id}
+			});
+			setMeetings(meetings.filter(m => m._id !== meetingId));
+			res.status(200).json({message: "Deleted successfully"});
+		}
+		catch(err){
+			res.status(500).json("Something went wrong");
 		}
 	};
 
