@@ -94,13 +94,13 @@ html, body{
 
 .buttons h1{
 	background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.6rem;
-  color: #7a6a9a;
-  padding: 4px 10px;
+  	border: none;
+  	cursor: pointer;
+  	font-size: 1.6rem;
+  	color: #7a6a9a;
+  	padding: 4px 10px;
 	padding-bottom: 0px;
-  border-radius: 0.5rem;
+  	border-radius: 0.5rem;
 	white-space: nowrap;
 }
 

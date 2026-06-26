@@ -12,3 +12,145 @@ body{
 	color: #544c6c;
 	white-space: nowrap;
 }
+
+.space_name {
+	text-align: center;
+	margin: 0.5rem;
+	color: #0e4444;
+}
+
+.cont_2{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	margin-top: 1rem;
+}
+
+.add_meet_btn {
+	background-color: rgba(255,255,255,0.3);
+	font-size: 1.45rem;
+	font-weight: 600;
+	color: black;
+	padding: 0.8rem;
+	border: none;
+	border-radius: 0.8rem;
+}
+
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(0,0,0, 0.6);
+	width: 100vw;
+	height: 100vh;
+}
+
+.meet_form {
+	background: linear-gradient(160deg, #a8c8f8 0%, #c9b8f0 40%, #f0b8d8 100%);
+	height: 60%;
+	width: 30%;
+	padding: 0rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+	border: 1.6px solid rgb(255, 255, 255);
+	border-radius: 0.6rem;
+}
+
+.schedule_meet {
+	display: flex;
+	flex-direction: column;
+	gap: 0.9rem;
+	justify-content: center;
+	align-items: center;
+}
+
+.schedule_meet input, .schedule_meet textarea{
+  width:420px;
+  height:3.2rem;
+  padding:0 18px;
+  font-size:1.2rem;
+  color:#4d4564;
+  background:rgba(255,255,255,.15);
+  border:1.5px solid rgba(255,255,255,.65);
+  border-radius:1rem;
+  outline:none;
+  backdrop-filter:blur(10px);
+}
+
+.schedule_meet input:focus, .schedule_meet textarea:focus{
+    border-color:#6f63d8;
+    box-shadow:0 0 0 4px rgba(111,99,216,.15);
+}
+
+.schedule_meet h2{
+	color: #544c6c;
+}
+
+.schedule_meet input::placeholder {
+	color: black;
+}
+
+.sche_meet_btns{
+	display: flex;
+	gap: 1rem;
+}
+
+.sche_meet_btns button{
+	background: none;
+	color: #544c6c;
+	padding: 0.6rem;
+	border: 1px solid white;
+	font-size: 1.2rem;
+	font-weight: 600;
+	border-radius: 0.5rem;
+}
+
+.cont {
+	display: grid;
+	grid-template-columns: 10rem auto;
+}
+
+.members_names h1{
+	margin: 1rem;
+}
+
+.members_names{
+	border-right: 1.8px solid whitesmoke;
+	min-height: 70vh;
+}
+
+.member_name {
+	margin-left: 2rem;
+	margin-bottom: 0.7rem;
+	color: #4d4564;
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
+.space_names {
+	text-align: center;
+}
+
+.no_meets {
+	font-size: 1.8rem;
+	text-align: center;
+	color: #4d4564;
+	margin-top: 4rem;
+	font-weight: 600;
+}
+
+.meet_card{
+	display: flex;
+	flex-direction: column;
+}
+
+.meet_card button {
+	width: 200px;
+}

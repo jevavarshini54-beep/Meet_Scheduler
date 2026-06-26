@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { motion } from 'framer-motion';
+import { easeIn, motion } from 'framer-motion';
 import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
+import { IconTrash } from '@tabler/icons-react';
+import './MyMeetings.css'
 
 function MyMeetings({currentUser, setCurrentUser}) {
 
@@ -13,7 +15,6 @@ function MyMeetings({currentUser, setCurrentUser}) {
 	const [loading, setLoading] = useState(true);
 	const [message, setMessage] = useState('');
 	const [showMeetingModal, setShowMeetingModal] = useState(false);
-
 
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
@@ -110,68 +111,79 @@ function MyMeetings({currentUser, setCurrentUser}) {
     return <div>Space not found</div>;
 	}
 
+	const navBar = {initial: {y: -20, opacity: 0}, animate: {y: 0, opacity: 1, transition: {duration: 1.6, ease: easeIn}}, exit: {y: -20, opacity: 0}};
+
   return(
     <div>
-			<div className='navbar'>
+			<motion.div className='navbar' variants={navBar} initial="initial" animate="animate" exit="exit">
 					<h1 className='title'>Meeting Scheduler</h1>
 					<motion.button className='logoutBtn' onClick={handleLogout} whileHover={{y: 3, x: -3, opacity: 0.9}} whileTap={{y: 0, x: -3, opacity: 0.83}}>Logout</motion.button>
+			</motion.div>
+			<div className='cont_2'>
+				<h1 className='space_name'>{space.name} (Code : {space.code})</h1>
+				<button onClick={() => {setShowMeetingModal(true); setMessage('');}} className='add_meet_btn'>Add Meet</button>
 			</div>
-			<div>
-				<h1>{space.name}</h1>
-				<p className='space_code_display'>Code: {space.code}</p>
-			</div>
-			<div>
-				<h3>Members</h3>
-					{space.members.map(m => (
-						<div key={m._id}>{m.username}</div>
-					))}
-			</div>
-			
-			<div>
-				<button onClick={() => {setShowMeetingModal(true); setMessage('');}}>Add Meet</button>
-				{showMeetingModal && (
-					<div>
-						<div>
-							<h3>Schedule a meeting</h3>
-							<input type="text" placeholder='Give a Title' value={title}
-								onChange={(e) => setTitle(e.target.value)}></input>
-							<input type="text" placeholder='Give description (optional)' value={description}
-								onChange={(e) => setDescription(e.target.value)}></input>
-							<input type="date" placeholder='Date' value={date}
-								onChange={(e) => setDate(e.target.value)}></input>
-							<input type="time" placeholder='Time' value={time}
-								onChange={(e) => setTime(e.target.value)}></input>
-							<input type="number" placeholder='Duration (in mins)' value={duration} min="0"
-								onChange={(e) => setDuration(e.target.value)}></input>
-							{message && <p>{message}</p>}	
-						</div>
 
-						<div>
-							<button onClick={handleCreateMeeting}>Schedule</button>
-							<button onClick={() => {setShowMeetingModal(false); setMessage('');}}>Cancel</button>
+			<div>
+				{showMeetingModal && (
+					<div className='overlay'>
+							<div className='meet_form'>
+								<div className='schedule_meet'>
+									<h2>Schedule a meeting</h2>
+									<input type="text" placeholder='Give a Title' value={title}
+										onChange={(e) => setTitle(e.target.value)}></input>
+									<input type="text" placeholder='Give description (optional)' value={description}
+										onChange={(e) => setDescription(e.target.value)}></input>
+									<input type="date" placeholder='Date' value={date}
+										onChange={(e) => setDate(e.target.value)}></input>
+									<input type="time" placeholder='Time' value={time}
+										onChange={(e) => setTime(e.target.value)}></input>
+									<input type="number" placeholder='Duration (in mins)' value={duration} min="0"
+										onChange={(e) => setDuration(e.target.value)}></input>
+									{message && <p>{message}</p>}	
+								</div>
+
+								<div className='sche_meet_btns'>
+									<button onClick={handleCreateMeeting}>Schedule</button>
+									<button onClick={() => {setShowMeetingModal(false); setMessage('');}}>Cancel</button>
+								</div>
+							</div>
 						</div>
-					</div>
 				)}
 			</div>
-			<div>
-				<h3>Meetings in this Space</h3>
-				{meetings.length === 0 ? (
-					<p>No meetings scheduled yet!!</p>
-				) : (
-					meetings.map(m => (
-						<div key={m._id}>
-							<p>{m.title}</p>
-							<p>{m.description}</p>
-							<p>Organised By : {m.createdBy?.username}</p>
-							<p>Date : {new Date(m.startTime).toLocaleDateString()}</p>
-							<p>Starting Time : {new Date(m.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-							<p>Duration : {m.duration} mins</p>
-							{m.createdBy?._id === currentUser._id && (
-            					<button onClick={() => handleDeleteMeeting(m._id)}>Delete</button>
-       	 					)}
-						</div>
-					))
-				)}
+
+			<div className='cont'>
+				<div className='members_names'>
+					<h1>Members</h1>
+						{space.members.map(m => (
+							<div key={m._id} className='member_name'>• {m.username}</div>
+						))}
+				</div>
+				<div className='space_names'>
+					{meetings.length === 0 ? (
+						<div className='no_meets'>No meetings scheduled yet!!</div>
+					) : (
+						meetings.map(m => (
+							<div key={m._id} className='meet_card'>
+								<div>
+									<p>Meet : {m.title}</p>
+									<p>Description : {m.description}</p>
+								</div>
+								<div>
+									<p>Organised By : {m.createdBy?.username}</p>
+									<p>Duration : {m.duration} mins</p>
+								</div>
+								<div>
+									<p>Date : {new Date(m.startTime).toLocaleDateString()}</p>
+									<p>Starting Time : {new Date(m.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+								</div>
+								{m.createdBy?._id === currentUser._id && (
+												<button onClick={() => handleDeleteMeeting(m._id)}><IconTrash size={20} />Delete</button>
+										)}
+							</div>
+						))
+					)}
+				</div>
 			</div>
 		</div>
   );
