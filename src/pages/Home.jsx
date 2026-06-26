@@ -193,18 +193,13 @@ function Home({currentUser, setCurrentUser}) {
 									<div className='no_meet'>No meetings for this day</div>
 								) : (
 									getMeetingsForDate(selectedDate).map(m => (
-										<div>
+										<div className='behind_cal' key={m._id}>
 											<p>Title : {m.title}</p>
 											<p>Details : {new Date(m.startTime).toLocaleDateString()} •{' '}
 											{new Date(m.startTime).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})} •{' '}
 											{m.duration} mins</p>
 											{m.description && <p>Description : {m.description}</p>}
 											<p>Organised By : {m.createdBy?.username}</p>
-
-										{/* only the creator sees the delete button*/}
-										{m.createdBy?._id === currentUser._id && (
-											<IconTrash size={20}></IconTrash>
-										)}
 										</div>
 									))
 								)}

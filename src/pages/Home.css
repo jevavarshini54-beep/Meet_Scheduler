@@ -1,11 +1,17 @@
 *{
-  margin: 0;
+	margin: 0;
 	padding: 0;
+	box-sizing: border-box;
 }
 
-body{
+html, body{
 	background: linear-gradient(160deg, #a8c8f8 0%, #c9b8f0 40%, #f0b8d8 100%);
-	min-height: 100vh;
+
+}
+
+#root {
+    min-height: 100vh;
+    background: transparent;
 }
 
 .title {
@@ -24,7 +30,7 @@ body{
 
 .calendarGrid {
 	display: grid;
-	grid-template-columns: repeat(7,6.2rem);
+	grid-template-columns: repeat(7,minmax(0,1fr));
 	height: 30rem;
 	justify-content: center;
 }
@@ -33,11 +39,11 @@ body{
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-  align-items: center;
+  	align-items: center;
 	padding: 1rem 2rem;
-  background: rgba(255,255,255,0.3);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255,255,255,0.5);
+  	background: rgba(255,255,255,0.3);
+  	backdrop-filter: blur(20px);
+  	border-bottom: 1px solid rgba(255,255,255,0.5);
 }
 
 .logoutBtn {
@@ -60,7 +66,7 @@ body{
 .left_right {
 	display: grid;
 	grid-template-columns: repeat(2,1fr);
-	border: 1.1px solid rgb(255, 255, 255,0.9);
+	border: none;
 	border-radius: 1rem;
 	margin: 1.8rem 1.6rem;
 }
@@ -74,7 +80,8 @@ body{
 .left_cont{
 	padding-left: 1rem;
 	position: relative;
-	width: 43.4rem;
+	width: 100%;
+	max-width: 43.4rem;
 }
 
 .buttons button{
@@ -100,23 +107,23 @@ body{
 .days {
 	font-size: 1.2rem;
 	margin-right: 3rem;
-  font-weight: 600;
+  	font-weight: 600;
 	display: flex;
 	justify-content: center;
-  color: #095474;
+  	color: #095474;
 }
 
 .dates {
 	font-size: 1.7rem;
 	width: 3rem;
-  height: 3rem;
+  	height: 3rem;
 	box-sizing: border-box;
 	cursor: pointer;
 }
 
 .calendarGrid > div{
-  display: flex;
-  justify-content: center;
+  	display: flex;
+  	justify-content: center;
 	align-items: center;
 }
 
@@ -142,16 +149,21 @@ body{
 
 .your_meets {
 	min-height: 60vh;
+	display: flex;
+	flex-direction: column;
+
 }
 
 .back_btn {
-	position: absolute;
 	background: rgba(255,255,255,0.3);
 	font-weight: 500;
-	top: 1rem;
-	left: 1rem;
+	border: 1px solid snow;
+	border-radius: 0.4rem;
 	font-size: 1.3rem;
-	padding: 0.5rem;
+	padding: 0.3rem;
+	align-self: flex-start;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
 }
 
 .right_cont_btns {
@@ -196,6 +208,7 @@ body{
 	padding-left: 2rem;
 	padding-right: 2rem;
 	margin: 0.9rem;
+	margin-left: 2rem;
 	display: inline-flex;
 	gap: 3rem;
 	white-space: nowrap;
@@ -269,4 +282,124 @@ body{
 
 .message {
 	color: #480b49;
+}
+
+.behind_cal {
+	border: 1px solid snow;
+	border-radius: 1rem;
+	border-radius: 0.7rem;
+	padding: 1rem 2rem;
+	margin: 0.9rem;
+	margin-left: 1.0rem;
+	box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+}
+
+.behind_cal p {
+	margin: 0.35rem 0;
+	line-height: 1.5;
+}
+
+.behind_cal p:first-child {
+	font-size: 1.15rem;
+	font-weight: 700;
+	margin-bottom: 0.5rem;
+	color: #3d2a5c;
+}
+
+.behind_cal p:nth-child(2), .behind_cal p:nth-child(3), .behind_cal p:nth-child(4) {
+	font-size: 1rem;
+	font-weight: 700;
+	margin-bottom: 0.5rem;
+	color: #0e4444;
+}
+
+@media (max-width: 700px){
+	.navbar {
+		padding: 0.8rem 1rem;
+	}
+
+	.title {
+		font-size: 2.2rem;
+	}
+
+	.logoutBtn {
+		font-size: 1.1rem;
+		padding: 0.5rem 1rem;
+	}
+
+	.dates{
+		font-size: 1.2rem;
+		max-width: 2rem;
+	}
+
+	.days{
+		font-size: 1rem;
+		margin-right: 1.4rem;
+	}
+
+	.left_right {
+		grid-template-columns: 1fr;
+		border: none;
+		gap: 1rem;
+	}
+
+	.calendarGrid{
+		grid-template-columns: repeat(7,3rem);
+	}
+	.right_cont_btns {
+		gap: 1rem;
+	}
+
+	.space {
+		padding-left: 1rem;
+		padding-right: 1rem;
+		margin-left: 0.9rem;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+
+	.behind_cal{
+		padding: 1rem;
+		margin-left: 0.5rem;
+		margin-right: 0.5rem;
+	}
+
+	.no_meet{
+		padding: 4rem 1rem;
+		font-size: 1.2rem;
+	}
+
+	.left_cont, .right_cont{
+		margin: 0rem 0rem;
+	}
+
+	.today {
+		background: linear-gradient(160deg, #a8c8f8 0%, #c9b8f0 40%, #f0b8d8 100%);
+		border: 2px solid rgb(106, 48, 104);
+		padding: 0.5rem;
+}
+
+	.hasMeeting {
+		border: 2px solid rgb(106, 48, 104);
+		padding: 0.5rem;
+	}
+}
+
+@media (min-width: 701px) and (max-width: 1240px){
+	.left_cont, .right_cont{
+		margin: 0rem 0rem;
+	}
+
+	.left_right {
+		grid-template-columns: 1fr;
+		border: none;
+		gap: 1rem;
+	}
+
+}
+
+@media (min-width: 1241px) {
+	.left_right{
+		gap: 1rem;
+	}
 }
