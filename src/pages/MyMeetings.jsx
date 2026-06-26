@@ -166,6 +166,9 @@ function MyMeetings({currentUser, setCurrentUser}) {
 							<p>Date : {new Date(m.startTime).toLocaleDateString()}</p>
 							<p>Starting Time : {new Date(m.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
 							<p>Duration : {m.duration} mins</p>
+							{m.createdBy?._id === currentUser._id && (
+            					<button onClick={() => handleDeleteMeeting(m._id)}>Delete</button>
+       	 					)}
 						</div>
 					))
 				)}
