@@ -155,9 +155,11 @@ function MyMeetings({currentUser, setCurrentUser}) {
 			<div className='cont'>
 				<div className='members_names'>
 					<h1>Members</h1>
-						{space.members.map(m => (
-							<div key={m._id} className='member_name'>• {m.username}</div>
-						))}
+					<div className='members_list'>
+							{space.members.map(m => (
+								<div key={m._id} className='member_name'>{m.username}</div>
+							))}
+					</div>
 				</div>
 				<div className='space_names'>
 					{meetings.length === 0 ? (
@@ -165,21 +167,23 @@ function MyMeetings({currentUser, setCurrentUser}) {
 					) : (
 						meetings.map(m => (
 							<div key={m._id} className='meet_card'>
-								<div>
-									<p>Meet : {m.title}</p>
-									<p>Description : {m.description}</p>
-								</div>
-								<div>
-									<p>Organised By : {m.createdBy?.username}</p>
-									<p>Duration : {m.duration} mins</p>
-								</div>
-								<div>
-									<p>Date : {new Date(m.startTime).toLocaleDateString()}</p>
-									<p>Starting Time : {new Date(m.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+								<div className='meet_grid'>
+									<div>
+										<p><span className='label'>Meet&nbsp;</span><span className='value'>: {m.title}</span></p>
+										{m.description && <p><span className='label'>Description&nbsp;</span><span className='value'>: {m.description}</span></p>}
+										<p><span className='label'>Organised By&nbsp;</span><span className='value'>: {m.createdBy?.username}</span></p>
+									</div>
+									<div>
+										<p><span className='label'>Duration&nbsp;</span><span className='value'>: {m.duration} mins</span></p>
+										<p><span className='label'>Date&nbsp;</span><span className='value'>: {new Date(m.startTime).toLocaleDateString()}</span></p>
+										<p><span className='label'>Starting Time&nbsp;</span><span className='value'>: {new Date(m.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span></p>
+									</div>
 								</div>
 								{m.createdBy?._id === currentUser._id && (
-												<button onClick={() => handleDeleteMeeting(m._id)}><IconTrash size={20} />Delete</button>
-										)}
+									<div className='meet_row'>
+										<button onClick={() => handleDeleteMeeting(m._id)}><IconTrash size={20} />Delete</button>
+									</div>
+								)}
 							</div>
 						))
 					)}
