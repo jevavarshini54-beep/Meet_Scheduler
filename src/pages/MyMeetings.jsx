@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { easeIn, motion } from 'framer-motion';
+import { animate, AnimatePresence, easeIn, easeInOut, motion } from 'framer-motion';
 import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
 import { IconTrash } from '@tabler/icons-react';
@@ -74,7 +74,12 @@ function MyMeetings({currentUser, setCurrentUser}) {
 				spaceId: id, userId: currentUser._id
 			});
 
-			setMeetings([...meetings, res.data.meeting]);
+			const newMeeting = {
+      			...res.data.meeting,
+      			createdBy: { _id: currentUser._id, username: currentUser.username }
+    		};
+
+			setMeetings([...meetings, newMeeting]);
 			setTitle('');
 			setDescription('');
 			setDuration('');
@@ -104,14 +109,18 @@ function MyMeetings({currentUser, setCurrentUser}) {
 	};
 
 	if (loading) {
-    return <div>Loading space...</div>;
+    return <div className='msg'>Loading space...</div>;
 	}
 
 	if (!space) {
-    return <div>Space not found</div>;
+    return <div className='msg'>Space not found</div>;
 	}
 
 	const navBar = {initial: {y: -20, opacity: 0}, animate: {y: 0, opacity: 1, transition: {duration: 1.6, ease: easeIn}}, exit: {y: -20, opacity: 0}};
+	const Cont = {initial: {opacity: 0, x: -50}, animate: {opacity: 1, x: 0, transition: {duration: 2}}};
+	const pop_up = {initial: {opacity: 0, y: -80}, animate: {opacity: 1, y: 0, transition: {duration: 2}}, exit: {opacity: 0, y: -80}};
+	const mem_variants = {initial: {x: -40, opacity: 0}, animate: {opacity: 1, x:0, transition: {duration: 2, ease: easeInOut}}};
+	const no_meets_var = {initial: {x: 40, opacity: 0}, animate: {opacity: 1, x:0, transition: {duration: 2, ease: easeInOut}}};
 
   return(
     <div>
@@ -119,55 +128,64 @@ function MyMeetings({currentUser, setCurrentUser}) {
 					<h1 className='title'>Meeting Scheduler</h1>
 					<motion.button className='logoutBtn' onClick={handleLogout} whileHover={{y: 3, x: -3, opacity: 0.9}} whileTap={{y: 0, x: -3, opacity: 0.83}}>Logout</motion.button>
 			</motion.div>
-			<div className='cont_2'>
+			<motion.div className='cont_2' variants={Cont} initial="initial" animate="animate">
 				<h1 className='space_name'>{space.name} (Code : {space.code})</h1>
-				<button onClick={() => {setShowMeetingModal(true); setMessage('');}} className='add_meet_btn'>Add Meet</button>
-			</div>
+				<motion.button onClick={() => {setShowMeetingModal(true); setMessage('');}} className='add_meet_btn'
+					whileHover={{opacity: 0.9, x: -3, y: 3, transition: {type: "spring", damping: 14, stiffness: 300}}}
+					whileTap={{opacity: 0.8, x: -3, y: 3, scale: 0.9, transition: {type: "spring", damping: 14, stiffness: 300}}}>Add Meet</motion.button>
+			</motion.div>
 
 			<div>
-				{showMeetingModal && (
-					<div className='overlay'>
-							<div className='meet_form'>
-								<div className='schedule_meet'>
-									<h2>Schedule a meeting</h2>
-									<input type="text" placeholder='Give a Title' value={title}
-										onChange={(e) => setTitle(e.target.value)}></input>
-									<input type="text" placeholder='Give description (optional)' value={description}
-										onChange={(e) => setDescription(e.target.value)}></input>
-									<input type="date" placeholder='Date' value={date}
-										onChange={(e) => setDate(e.target.value)}></input>
-									<input type="time" placeholder='Time' value={time}
-										onChange={(e) => setTime(e.target.value)}></input>
-									<input type="number" placeholder='Duration (in mins)' value={duration} min="0"
+				<AnimatePresence>
+					{showMeetingModal && (
+						<div className='overlay'>
+								<motion.div className='meet_form' variants={pop_up} initial="initial" animate="animate" exit="exit">
+									<div className='schedule_meet'>
+										<h2>Schedule a meeting</h2>
+										<input type="text" placeholder='Give a Title' value={title}
+											onChange={(e) => setTitle(e.target.value)}></input>
+										<input type="text" placeholder='Give description (optional)' value={description}
+											onChange={(e) => setDescription(e.target.value)}></input>
+										<input type="date" placeholder='Date' value={date}
+											onChange={(e) => setDate(e.target.value)}></input>
+										<input type="time" placeholder='Time' value={time}
+											onChange={(e) => setTime(e.target.value)}></input>
+										<input type="number" placeholder='Duration (in mins)' value={duration} min="0"
 										onChange={(e) => setDuration(e.target.value)}></input>
-									{message && <p>{message}</p>}	
-								</div>
+										{message && <p>{message}</p>}	
+									</div>
 
-								<div className='sche_meet_btns'>
-									<button onClick={handleCreateMeeting}>Schedule</button>
-									<button onClick={() => {setShowMeetingModal(false); setMessage('');}}>Cancel</button>
-								</div>
+									<div className='sche_meet_btns'>
+										<motion.button onClick={handleCreateMeeting} whileHover={{opacity: 0.9, x: -3, y: 3, transition: {type: "spring", damping: 14, stiffness: 300}}}
+											whileTap={{opacity: 0.8, x: -3, y: 3, scale: 0.9, transition: {type: "spring", damping: 14, stiffness: 300}}}>Schedule</motion.button>
+										<motion.button onClick={() => {setShowMeetingModal(false); setMessage('');}} whileHover={{opacity: 0.9, x: -3, y: 3, transition: {type: "spring", damping: 14, stiffness: 300}}}
+											whileTap={{opacity: 0.8, x: -3, y: 3, scale: 0.9, transition: {type: "spring", damping: 14, stiffness: 300}}}>Cancel</motion.button>
+									</div>
+								</motion.div>
 							</div>
-						</div>
-				)}
+					)}
+				</AnimatePresence>
 			</div>
 
 			<div className='cont'>
-				<div className='members_names'>
+				<motion.div className='members_names' variants={mem_variants} initial="initial" animate="animate">
 					<h1>Members</h1>
 					<div className='members_list'>
 							{space.members.map(m => (
-								<div key={m._id} className='member_name'>{m.username}</div>
+								<motion.button key={m._id} className='member_name'
+									whileHover={{scale: 1.08, opacity: 0.9, x: 10}}>{m.username}</motion.button>
 							))}
 					</div>
-				</div>
+				</motion.div>
+
 				<div className='space_names'>
 					{meetings.length === 0 ? (
-						<div className='no_meets'>No meetings scheduled yet!!</div>
+						<motion.div className='no_meets' variants={no_meets_var}
+							initial="initial" animate="animate">No meetings scheduled yet!!</motion.div>
 					) : (
 						meetings.map(m => (
-							<div key={m._id} className='meet_card'>
-								<div className='meet_grid'>
+							<motion.div key={m._id} className='meet_card' variants={no_meets_var} initial="initial" animate="animate" whileHover={{scale: 1.03}}>
+								<motion.div className='meet_grid'>
 									<div>
 										<p><span className='label'>Meet&nbsp;</span><span className='value'>: {m.title}</span></p>
 										{m.description && <p><span className='label'>Description&nbsp;</span><span className='value'>: {m.description}</span></p>}
@@ -178,13 +196,15 @@ function MyMeetings({currentUser, setCurrentUser}) {
 										<p><span className='label'>Date&nbsp;</span><span className='value'>: {new Date(m.startTime).toLocaleDateString()}</span></p>
 										<p><span className='label'>Starting Time&nbsp;</span><span className='value'>: {new Date(m.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span></p>
 									</div>
-								</div>
+								</motion.div>
 								{m.createdBy?._id === currentUser._id && (
 									<div className='meet_row'>
-										<button onClick={() => handleDeleteMeeting(m._id)}><IconTrash size={20} />Delete</button>
+										<motion.button onClick={() => handleDeleteMeeting(m._id)}
+											whileHover={{opacity: 0.9, x: -3, y: 3, transition: {type: "spring", damping: 14, stiffness: 300}}}
+											whileTap={{opacity: 0.8, x: -3, y: 3, scale: 0.9, transition: {type: "spring", damping: 14, stiffness: 300}}}><IconTrash size={20} />Delete</motion.button>
 									</div>
 								)}
-							</div>
+							</motion.div>
 						))
 					)}
 				</div>

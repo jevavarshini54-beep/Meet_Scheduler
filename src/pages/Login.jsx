@@ -57,9 +57,9 @@ function Login({setCurrentUser}){
 				<motion.div className='login_box' initial={{opacity: 0, y: 40, scale: 0.95}}
 					animate={{opacity: 1, y: -20, scale: 1}} transition={{ease: "easeInOut", duration: 2}}>
 					<h3>Enter your username to proceed</h3>
-					<input type="text" placeholder='Enter username...' value={username} className='name'
+					<input type="text" placeholder='Username' value={username} className='name'
 						onKeyDown={(e) => e.key === 'Enter' && handleLogin()} onChange={(e) => setUsername(e.target.value)} />
-					<motion.button onClick={handleLogin} whileHover={{scale: 1.08, y: -3}} whileTap={{scale: 0.95}}><h3>Click to proceed</h3></motion.button>
+					<motion.button onClick={handleLogin} whileHover={{scale: 1.02, y: -3}} whileTap={{scale: 0.95}}><h3>Proceed</h3></motion.button>
 
 					{message && <p className='invalid_name'>{message}</p>}
 				</motion.div>

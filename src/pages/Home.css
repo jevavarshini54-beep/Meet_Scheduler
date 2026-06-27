@@ -284,6 +284,17 @@ html, body{
 	color: #480b49;
 }
 
+.space_info input:focus, .space_info textarea:focus{
+    border-color:#6f63d8;
+    box-shadow:0 0 0 2px rgba(111,99,216,.15);
+}
+
+.space_info input, .space_info textarea{
+	background:rgba(255,255,255,.15);
+  	border:1.5px solid rgba(255,255,255,.65);
+	outline: none;
+}
+
 .behind_cal {
 	border: 1px solid snow;
 	border-radius: 1rem;

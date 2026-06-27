@@ -4,6 +4,8 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import MyMeetings from './pages/MyMeetings';
 import axios from 'axios';
+import { AnimatePresence, motion } from 'framer-motion';
+import './App.css'
 
 function App() {
 
@@ -66,17 +68,24 @@ function App() {
     }
 
     checkUpcomingMeetings();
-    const interval = setInterval(checkUpcomingMeetings, 30000);
+    const interval = setInterval(checkUpcomingMeetings, 2000);
     return () => clearInterval(interval);
   },[currentUser])
 
   return (
     <BrowserRouter>
-      {banner && (
-        <div>
-          <p>{banner.title}</p>
-        </div>
-      )}
+      <AnimatePresence>
+        {banner && (
+          <div className='overlay'>
+            <motion.div className='meeting_banner'
+              initial={{opacity: 0, y: -40}} animate={{opacity: 1, y: 0}}
+              exit={{opacity: 0, y: -40}} transition={{duration: 0.9}}>
+              <p>{banner.title}</p>
+              <p className='banner_time'>Starts at {new Date(banner.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
       <Routes>
         <Route path="/" element={<Login setCurrentUser={handleLogin} />}></Route>
         <Route path="/home" element={currentUser ? <Home currentUser={currentUser} setCurrentUser={setCurrentUser} /> : <Navigate to='/' />}></Route>

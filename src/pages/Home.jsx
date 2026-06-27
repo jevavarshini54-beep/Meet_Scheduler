@@ -146,6 +146,7 @@ function Home({currentUser, setCurrentUser}) {
 	const rightCont = {initial: {x: 60, opacity: 0}, animate: {x: 0, opacity: 1, transition: {duration: 2, ease: easeIn}}, exit: {x: 60, opacity: 0}};
 	const leftMeet = {initial: {x: 18, opacity: 0},animate: {x: 0, opacity: 1, transition: {duration: 0.7, ease: easeOut}}};
 	const rightSpace = {initial: {x: -18, opacity: 0},animate: {x: 0, opacity: 1, transition: {duration: 0.7, ease: easeOut}}};
+	const popUp = {initial: {opacity: 0, y: -80}, animate: {opacity: 1, y: 0, transition: {duration: 2}}, exit: {opacity: 0, y: -80}};
 
   return(
 		<div>
@@ -243,31 +244,35 @@ function Home({currentUser, setCurrentUser}) {
 					)}
 
 					{showCreateModal &&  
-						<div className='overlay'>
-							<div className='space_info'>
-								<input type="text" placeholder='Space name' value={spaceName} className='input_box'
-									onChange={(e) => setSpaceName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleCreateSpace} />
-								{message && <p className='message'>{message}</p>}
-								<div className='space_buttons'>
-									<motion.button onClick={handleCreateSpace} whileHover={{scale: 1.06, opacity: 0.96}} whileTap={{scale: 1.06, opacity: 0.96}}>Create</motion.button>
-									<motion.button onClick={() => {setShowCreateModal(false); setMessage('')}} whileHover={{scale: 1.06, opacity: 0.96}} whileTap={{scale: 1.06, opacity: 0.96}}>Cancel</motion.button>
-								</div>
+						<AnimatePresence>
+							<div className='overlay'>
+								<motion.div className='space_info' variants={popUp} initial="initial" animate="animate" exit="exit">
+									<input type="text" placeholder='Space name' value={spaceName} className='input_box'
+										onChange={(e) => setSpaceName(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleCreateSpace()} />
+									{message && <p className='message'>{message}</p>}
+									<div className='space_buttons'>
+										<motion.button onClick={handleCreateSpace} whileHover={{scale: 1.06, opacity: 0.96}} whileTap={{scale: 1.06, opacity: 0.96}}>Create</motion.button>
+										<motion.button onClick={() => {setShowCreateModal(false); setMessage('')}} whileHover={{scale: 1.06, opacity: 0.96}} whileTap={{scale: 1.06, opacity: 0.96}}>Cancel</motion.button>
+									</div>
+								</motion.div>
 							</div>
-						</div>
+						</AnimatePresence>
 					}
 
 					{showJoinModal &&	
-						<div className='overlay'>
-							<div className='space_info'>
-								<input type="text" placeholder='Space code' value={spaceCode} className='input_box'
-									onChange={(e) => setSpaceCode(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleJoinSpace}/>
-								{message && <p className='message'>{message}</p>}
-								<div className='space_buttons'>
-									<motion.button onClick={() => handleJoinSpace()} whileHover={{scale: 1.06, opacity: 0.96}} whileTap={{scale: 1.06, opacity: 0.96}}>Join</motion.button>
-									<motion.button onClick={() => {setShowJoinModal(false); setMessage('')}} whileHover={{scale: 1.06, opacity: 0.96}} whileTap={{scale: 1.06, opacity: 0.96}}>Cancel</motion.button>
-								</div>
+						<AnimatePresence>
+							<div className='overlay'>
+								<motion.div className='space_info' variants={popUp} initial="initial" animate="animate" exit="exit">
+									<input type="text" placeholder='Space code' value={spaceCode} className='input_box'
+										onChange={(e) => setSpaceCode(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleJoinSpace()}/>
+									{message && <p className='message'>{message}</p>}
+									<div className='space_buttons'>
+										<motion.button onClick={() => handleJoinSpace()} whileHover={{scale: 1.06, opacity: 0.96}} whileTap={{scale: 1.06, opacity: 0.96}}>Join</motion.button>
+										<motion.button onClick={() => {setShowJoinModal(false); setMessage('')}} whileHover={{scale: 1.06, opacity: 0.96}} whileTap={{scale: 1.06, opacity: 0.96}}>Cancel</motion.button>
+									</div>
+								</motion.div>
 							</div>
-						</div>
+						</AnimatePresence>
 					}
 				</motion.div>
 			</div>

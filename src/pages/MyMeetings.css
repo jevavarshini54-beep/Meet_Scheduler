@@ -72,7 +72,7 @@ body{
 }
 
 .schedule_meet input, .schedule_meet textarea{
-  width:420px;
+  width:100%;
   height:3.2rem;
   padding:0 18px;
   font-size:1.2rem;
@@ -208,4 +208,52 @@ body{
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   cursor: pointer;
+}
+
+.msg {
+	color: #544c6c;
+	font-size: 1.3rem;
+	font-weight: 600;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@media (max-width: 900px) {
+  .cont {
+    grid-template-columns: 1fr;
+  }
+
+  .members_names {
+    border-right: none;
+    min-height: auto;
+	padding-bottom: 1rem;
+  }
+
+  .members_list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 0 1rem;
+  }
+
+  .meet_card {
+    width: 90%;
+  }
+
+  .meet_form {
+    width: 60%;
+  }
+}
+
+@media (max-width: 600px) {
+	.cont_2 {
+		flex-direction: column;
+		gap: 0.8rem;
+		text-align: center;
+  	}
+
+	.meet_grid {
+    	grid-template-columns: 1fr;
+  }
 }
