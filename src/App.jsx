@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
 import Login from './pages/Login';
+import Signup from './pages/Signup';
 import Home from './pages/Home';
 import MyMeetings from './pages/MyMeetings';
 import axios from 'axios';
@@ -49,7 +50,6 @@ function App() {
 
           if (minutesLeft > 0 && minutesLeft<=5 && !notifiedMeetings.current.has(m._id)){
             notifiedMeetings.current.add(m._id);
-          
 
             if ('Notification' in window && Notification.permission === 'granted'){
               new Notification('Meeting will start soon!!',{

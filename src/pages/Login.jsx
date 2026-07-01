@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion'
 import './Login.css';
@@ -60,6 +60,7 @@ function Login({setCurrentUser}){
 					<input type="text" placeholder='Username' value={username} className='name'
 						onKeyDown={(e) => e.key === 'Enter' && handleLogin()} onChange={(e) => setUsername(e.target.value)} />
 					<motion.button onClick={handleLogin} whileHover={{scale: 1.02, y: -3}} whileTap={{scale: 0.95}}><h3>Proceed</h3></motion.button>
+					<p>Don't have an account? <Link to='/signup'>Signup</Link></p>
 
 					{message && <p className='invalid_name'>{message}</p>}
 				</motion.div>
