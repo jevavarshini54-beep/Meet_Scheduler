@@ -88,6 +88,7 @@ function App() {
       </AnimatePresence>
       <Routes>
         <Route path="/" element={<Login setCurrentUser={handleLogin} />}></Route>
+        <Route path="/signup" element={<Signup />}></Route>
         <Route path="/home" element={currentUser ? <Home currentUser={currentUser} setCurrentUser={setCurrentUser} /> : <Navigate to='/' />}></Route>
         <Route path="/space/:id" element={currentUser ? <MyMeetings currentUser={currentUser} setCurrentUser={setCurrentUser}/> : <Navigate to='/' />}></Route>
       </Routes>

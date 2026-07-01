@@ -1,0 +1,97 @@
+.container {
+  background: linear-gradient(160deg, #a8c8f8 0%, #c9b8f0 40%, #f0b8d8 100%);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	min-height: 100vh;
+	gap: 9rem;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.title {
+	color: #544c6c;
+	font-size: 4rem;
+}
+
+.signup_box {
+	border-radius: 2rem;
+	border: 4px solid #544c6c;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1.9rem;
+
+	padding-top: 1.1rem;
+	padding-bottom: 3.1rem;
+	padding-left: 1.2rem;
+	padding-right: 1.2rem;
+	min-width: 30rem;
+}
+
+.btn_box {
+	display: flex;
+	flex-direction: row;
+	gap: 2rem;
+}
+
+.btn_box button{
+	background: linear-gradient(160deg, #a8c8f8 0%, #c9b8f0 40%, #f0b8d8 100%);
+	color: #544c6c;
+	border: 2px solid #544c6c;
+	border-radius: 0.7rem;
+	padding-top: 0.5rem;
+	padding-left: 0.4rem;
+	padding-right: 0.4rem;
+	font-size: 1.5rem;
+	font-weight: 500;
+	padding-bottom: 0.3rem;
+	cursor: pointer;
+}
+
+.signup_box input:focus, .signup_box textarea:focus{
+    border-color:#6f63d8;
+    box-shadow:0 0 0 2px rgba(111,99,216,.15);
+}
+
+.signup_box input, .signup_box textarea{
+	background:rgba(255,255,255,.15);
+  border:1.5px solid rgba(255,255,255,.65);
+	outline: none;
+}
+
+.signup_box input::placeholder {
+	color: #544c6c;
+}
+
+.inp_box {
+	padding-left: 3px;
+	background: linear-gradient(160deg, #a8c8f8 0%, #c9b8f0 40%, #f0b8d8 100%);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255,255,255,0.4);
+	border-radius: 0.4rem;
+	font-size: 1.9rem;
+	color: #544c6c;
+	width: 19rem;
+}
+
+.create_acc {
+	font-size: 2.5rem;
+	font-weight: 600;
+	text-align: center;
+	color: #413b52;
+}
+
+.back_btn {
+	position: relative;
+	top: 0;
+	left: 2;
+	padding-bottom: 0;
+	font-size: 1.3rem;
+}
