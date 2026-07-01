@@ -1,8 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
 
-//Sending username to server
+const {signup, login, logout} = require('../Controllers/AuthControllers');
+
+router.post('/signup', signup);
+router.post('/login', login);
+router.post('/logout', logout);
+
+module.exports = router;
+
+/* Sending username to server
 router.post('/login', async (req,res) => {
   try{
 		const {username} = req.body;
@@ -34,6 +41,4 @@ router.post('/login', async (req,res) => {
 
 router.post('/logout', (req, res) => {
   res.status(200).json({ message: 'Logged out successfully' });
-});
-
-module.exports = router;
+});*/
