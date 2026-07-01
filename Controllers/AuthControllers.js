@@ -7,6 +7,26 @@ const signup = async(req, res) => {
 	try {
 		const {username, email, password} = req.body;
 
+		if (password.length < 8){
+			return res.status(400).json({message: "Password must be atleast 8 characters"});
+		}
+
+		const hasLetter = /[a-zA-Z]/.test(password);
+		const hasNumber = /[0-9]/.test(password);
+		const hassplChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+		if (!hasLetter) {
+			return res.status(400).json({message: "Password must contain an alphabet"});
+		}
+
+		if (!hasNumber) {
+			return res.status(400).json({message: "Password must contain a number"});
+		}
+
+		if (!hassplChar) {
+			return res.status(400).json({message: "Password must contain a special character"});
+		}
+
 		if (!username || !password || !email) {
 			return res.status(400).json({message: "All fields are required"});
 		}
