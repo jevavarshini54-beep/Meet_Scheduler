@@ -4,7 +4,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Home from './pages/Home';
 import MyMeetings from './pages/MyMeetings';
-import axios from 'axios';
+import api from './api/AxiosInstance';
 import { AnimatePresence, motion } from 'framer-motion';
 import './App.css'
 
@@ -41,7 +41,7 @@ function App() {
 
     const checkUpcomingMeetings = async() => {
       try{
-        const res = await axios.get(`http://localhost:5000/api/meetings/user/${currentUser._id}`);
+        const res = await api.get(`/meetings/user/${currentUser._id}`);
         const meetings = res.data.meetings;
 
         const now = new Date();
