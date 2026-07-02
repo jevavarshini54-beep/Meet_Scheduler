@@ -58,8 +58,10 @@ function Signup() {
 			<h1 className="title">{dispText}</h1>
 			{showForm && (
 				<div>
-					<div className="signup_box">
-						<button onClick={() => navigate('/')} className="back_btn"><IconArrowLeft size={20}></IconArrowLeft></button>
+					<motion.div className='signup_box' initial={{opacity: 0, y: 40, scale: 0.95}}
+						animate={{opacity: 1, y: -20, scale: 1}} transition={{ease: "easeInOut", duration: 2}}>
+						<motion.button onClick={() => navigate('/')} className="back_btn" whileHover={{scale: 0.95, y: 1, transition: {type: "spring", stiffness: 200, damping: 17}}}
+							whileTap={{scale: 0.95, y: 1, transition: {type: "spring", stiffness: 200, damping: 17}}}><IconArrowLeft size={20}></IconArrowLeft></motion.button>
 						<div className="create_acc">Create your account</div>
 						<input type="text" placeholder="Username" className="inp_box" value={username} onChange={(e) => setUsername(e.target.value)} />
 						<input type="email" placeholder="Email" className="inp_box" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -67,10 +69,12 @@ function Signup() {
 							onKeyDown={(e) => e.key === 'Enter' && handleSignup()} onChange={(e) => setPassword(e.target.value)} />
 						{message && <h4>{message}</h4>}
 						<div className="btn_box">
-							<button onClick={() => handleSignup()}>Sign up</button>
-							<button onClick={() => navigate('/')}>Cancel</button>
+						<motion.button onClick={() => handleSignup()} whileHover={{scale: 0.95, y: -3, transition: {type: "spring", stiffness: 200, damping: 17}}}
+							whileTap={{scale: 0.95, y: 0, transition: {type: "spring", stiffness: 200, damping: 17}}}><h3>Sign up</h3></motion.button>
+						<motion.button onClick={() => navigate('/')} whileHover={{scale: 0.95, y: -3, transition: {type: "spring", stiffness: 200, damping: 17}}}
+							whileTap={{scale: 0.95, y: 0, transition: {type: "spring", stiffness: 200, damping: 17}}}><h3>Cancel</h3></motion.button>
 						</div>
-					</div>
+					</motion.div>
 				</div>
 			)}
 		</div>

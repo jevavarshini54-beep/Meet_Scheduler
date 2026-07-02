@@ -31,6 +31,7 @@ function Login({setCurrentUser}){
 	},[]);
 
 	const handleLogin = async() => {
+		console.log('login function check');
 		if (!email || !password){
 			setMessage('All fields are required');
 			return;
@@ -42,7 +43,9 @@ function Login({setCurrentUser}){
 				password: password
 			});
 
+			console.log("About to set token, value is:", response.data.token);
 			sessionStorage.setItem('token', response.data.token);
+			console.log("Token in storage right after setting:", sessionStorage.getItem('token'));
 			setCurrentUser(response.data.user);
 			navigate('/home');
 		}
@@ -64,8 +67,9 @@ function Login({setCurrentUser}){
 						onChange={(e) => setEmail(e.target.value)} />
 					<input type="text" placeholder='Password' value={password} className='name'
 						onKeyDown={(e) => e.key === 'Enter' && handleLogin()} onChange={(e) => setPassword(e.target.value)} />
-					<motion.button onClick={handleLogin} whileHover={{scale: 1.02, y: -3}} whileTap={{scale: 0.95}}><h3>Login</h3></motion.button>
-					<p>Don't have an account? <Link to='/signup'>Signup</Link></p>
+					<motion.button onClick={handleLogin} whileHover={{scale: 0.95, y: -3, transition: {type: "spring", stiffness: 200, damping: 17}}}
+						whileTap={{scale: 0.95, y: 0, transition: {type: "spring", stiffness: 200, damping: 17}}}><h3>Login</h3></motion.button>
+					<h4 className='no_account'>Don't have an account? <Link to='/signup' className="signup_link">Signup</Link></h4>
 
 					{message && <p className='invalid_name'>{message}</p>}
 				</motion.div>

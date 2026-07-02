@@ -200,7 +200,8 @@ function Home({currentUser, setCurrentUser, onLogout}) {
 
 						{!showCalendar && (
 							<div className='your_meets'>
-								<button onClick={handleBack} className='back_btn'><IconArrowBack size={20} /></button>
+								<motion.button onClick={handleBack} className='back_btn' whileHover={{scale: 0.95, y: 1, transition: {type: "spring", stiffness: 200, damping: 17}}}
+									whileTap={{scale: 0.95, y: 1, transition: {type: "spring", stiffness: 200, damping: 17}}}><IconArrowBack size={20} /></motion.button>
 
 								{getMeetingsForDate(selectedDate).length === 0 ? (
 									<motion.div className='no_meet' variants={leftMeet} initial="initial" animate="animate">No meetings for this day</motion.div>
