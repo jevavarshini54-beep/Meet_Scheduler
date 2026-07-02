@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, spring, color, animate, easeIn, easeOut } from 'framer-motion';
 import { IconTrash, IconArrowBack } from "@tabler/icons-react";
-import axios from 'axios';
+import api from '../api/AxiosInstance';
 import './Home.css';
 
-function Home({currentUser, setCurrentUser}) {
+function Home({currentUser, setCurrentUser, onLogout}) {
 
 	const [spaceName, setSpaceName] = useState('');
 	const [spaceCode, setSpaceCode] = useState('');
@@ -20,7 +20,7 @@ function Home({currentUser, setCurrentUser}) {
 		}
 
 		try{
-			const res = await axios.post('http://localhost:5000/api/spaces/join_meetspace', {
+			const res = await api.post('/spaces/join_meetspace', {
 				userId : currentUser._id,
 				code : spaceCode.trim()
 			});
@@ -42,7 +42,7 @@ function Home({currentUser, setCurrentUser}) {
 		}
 
 		try{
-			const res = await axios.post('http://localhost:5000/api/spaces/create', {
+			const res = await api.post('/spaces/create', {
 				name: spaceName.trim(),
 				userId : currentUser._id
 			});
@@ -69,7 +69,7 @@ function Home({currentUser, setCurrentUser}) {
 
 	const fetchMeetings = async () => {
 		try{
-			const res = await axios.get(`http://localhost:5000/api/meetings/user/${currentUser._id}`);
+			const res = await api.get(`/meetings/user/${currentUser._id}`);
 			setMeetings(res.data.meetings);
 		}
 
@@ -81,7 +81,7 @@ function Home({currentUser, setCurrentUser}) {
 	// meeting spaces users are a part of
 	const fetchSpaces = async () => {
 		try{
-			const res = await axios.get(`http://localhost:5000/api/spaces/user/${currentUser._id}`);
+			const res = await api.get(`/spaces/user/${currentUser._id}`);
 			setSpaces(res.data.spaces);
 		}
 
@@ -133,8 +133,14 @@ function Home({currentUser, setCurrentUser}) {
 	};
 
 	const handleLogout = async () => {
-		await axios.post('http://localhost:5000/api/users/logout');
-		setCurrentUser(null);
+		try{
+			await api.post('/users/logout');
+		}
+
+		catch(err) {
+			console.log("Logout error", err);
+		}
+		onLogout();
 		navigate('/');
 	};
 

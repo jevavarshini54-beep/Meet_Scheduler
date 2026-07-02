@@ -21,6 +21,7 @@ function App() {
 
   const handleLogout = () => {
     sessionStorage.removeItem('user');
+    sessionStorage.removeItem('token');
     setCurrentUser(null);
   };
 
@@ -89,8 +90,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Login setCurrentUser={handleLogin} />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
-        <Route path="/home" element={currentUser ? <Home currentUser={currentUser} setCurrentUser={setCurrentUser} /> : <Navigate to='/' />}></Route>
-        <Route path="/space/:id" element={currentUser ? <MyMeetings currentUser={currentUser} setCurrentUser={setCurrentUser}/> : <Navigate to='/' />}></Route>
+        <Route path="/home" element={currentUser ? <Home currentUser={currentUser} setCurrentUser={setCurrentUser} onLogout={handleLogout}/> : <Navigate to='/' />}></Route>
+        <Route path="/space/:id" element={currentUser ? <MyMeetings currentUser={currentUser} setCurrentUser={setCurrentUser} onLogout={handleLogout}/> : <Navigate to='/' />}></Route>
       </Routes>
     </BrowserRouter>
   );

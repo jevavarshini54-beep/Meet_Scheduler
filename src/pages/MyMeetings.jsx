@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { animate, AnimatePresence, easeIn, easeInOut, motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../api/AxiosInstance';
 import {useNavigate, useParams} from 'react-router-dom';
 import { IconTrash } from '@tabler/icons-react';
 import './MyMeetings.css'
 
-function MyMeetings({currentUser, setCurrentUser}) {
+function MyMeetings({currentUser, setCurrentUser, onLogout}) {
 
   const {id} = useParams();
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ function MyMeetings({currentUser, setCurrentUser}) {
 
   const fetchSpace = async() => {
 		try{
-			const res = await axios.get(`http://localhost:5000/api/spaces/${id}`);
+			const res = await api.get(`/spaces/${id}`);
 			setSpace(res.data.space);
 		}
 
@@ -35,7 +35,7 @@ function MyMeetings({currentUser, setCurrentUser}) {
 
 	const fetchMeetings = async () => {
 		try {
-			const res = await axios.get(`http://localhost:5000/api/meetings/space/${id}`);
+			const res = await api.get(`/meetings/space/${id}`);
 			setMeetings(res.data.meetings);
 		}
  
@@ -54,8 +54,14 @@ function MyMeetings({currentUser, setCurrentUser}) {
 	},[id]);
 
 	const handleLogout = async () => {
-		await axios.post('http://localhost:5000/api/users/logout');
-		setCurrentUser(null);
+		try{
+			await api.post('/users/logout');
+		}
+
+		catch(err) {
+			console.log("Logout error : ", err);
+		}
+		onLogout();
 		navigate('/');
 	};
 
@@ -67,7 +73,7 @@ function MyMeetings({currentUser, setCurrentUser}) {
 		const startTime = new Date(`${date}T${time}`);
 
 		try{
-			const res = await axios.post('http://localhost:5000/api/meetings/create',{
+			const res = await api.post('/meetings/create',{
 				title: title.trim(),
 				description: description.trim(),
 				startTime, duration: Number(duration),
@@ -97,7 +103,7 @@ function MyMeetings({currentUser, setCurrentUser}) {
 
 	const handleDeleteMeeting = async(meetingId) => {
 		try{
-			const res = await axios.delete(`http://localhost:5000/api/meetings/${meetingId}`,{
+			const res = await api.delete(`/meetings/${meetingId}`,{
 				data: {userId: currentUser._id}
 			});
 			setMeetings(meetings.filter(m => m._id !== meetingId));
@@ -126,7 +132,7 @@ function MyMeetings({currentUser, setCurrentUser}) {
     <div>
 			<motion.div className='navbar' variants={navBar} initial="initial" animate="animate" exit="exit">
 					<h1 className='title'>Meeting Scheduler</h1>
-					<motion.button className='logoutBtn' onClick={handleLogout} whileHover={{y: 3, x: -3, opacity: 0.9}} whileTap={{y: 0, x: -3, opacity: 0.83}}>Logout</motion.button>
+					<motion.button className='logoutBtn' onClick={() => handleLogout()} whileHover={{y: 3, x: -3, opacity: 0.9}} whileTap={{y: 0, x: -3, opacity: 0.83}}>Logout</motion.button>
 			</motion.div>
 			<motion.div className='cont_2' variants={Cont} initial="initial" animate="animate">
 				<h1 className='space_name'>{space.name} (Code : {space.code})</h1>

@@ -67,7 +67,7 @@ function Signup() {
 							onKeyDown={(e) => e.key === 'Enter' && handleSignup()} onChange={(e) => setPassword(e.target.value)} />
 						{message && <h4>{message}</h4>}
 						<div className="btn_box">
-							<button onClick={handleSignup}>Sign up</button>
+							<button onClick={() => handleSignup()}>Sign up</button>
 							<button onClick={() => navigate('/')}>Cancel</button>
 						</div>
 					</div>
