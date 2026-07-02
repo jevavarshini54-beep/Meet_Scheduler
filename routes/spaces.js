@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Space = require('../models/Space');
 const User = require('../models/User');
+const authMiddleware = require('../ProtectedRoutes/authMiddleware');
 
 //creating a new meet-space
 router.post('/create', async (req,res) => {

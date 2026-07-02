@@ -3,6 +3,7 @@ const router = express.Router()
 const Meeting = require('../models/Meeting')
 const Space = require('../models/Space')
 const User = require('../models/User')
+const authMiddleware = require('../ProtectedRoutes/authMiddleware');
 
 //Create a meeting
 router.post('/create', async (req,res) => {

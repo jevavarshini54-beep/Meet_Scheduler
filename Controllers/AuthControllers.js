@@ -1,7 +1,6 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { BaseCollection } = require('mongoose');
 const validator = require('validator');
 
 const signup = async(req, res) => {
@@ -19,6 +18,11 @@ const signup = async(req, res) => {
 		const existingUser = await User.findOne({email});
 		if (existingUser) {
 			return res.status(400).json({message: "Email already registered"});
+		}
+
+		const existingUserName = await User.findOne({username});
+		if (existingUserName) {
+			return res.status(400).json({message: "Username already exists"});
 		}
 
 		if (password.length < 8){
@@ -67,7 +71,7 @@ const login = async(req, res) => {
 		const {email, password} = req.body;
 
 		if (!email || !password) {
-			return res.status.json({message: "All fields are required"});
+			return res.status(400).json({message: "All fields are required"});
 		}
 
 		if (!validator.isEmail(email)) {
@@ -81,7 +85,7 @@ const login = async(req, res) => {
 
 		const isMatch = await bcrypt.compare(password, user.password);
 		if (!isMatch) {
-			res.status(400).json({message: "Invalid credentials"})
+			return res.status(400).json({message: "Invalid credentials"})
 		};
 
 		const token = jwt.sign(
@@ -94,7 +98,13 @@ const login = async(req, res) => {
 			return res.status(400).json({message: "Token not created"});
 		}
 
-		res.status(200).json({message: "Login successful"});
+		res.status(200).json({message: "Login successful",
+			token, user: {
+				_id: user._id,
+				email: user.email,
+				username: user.username
+			}
+		});
 	}
 
 	catch {
@@ -103,6 +113,7 @@ const login = async(req, res) => {
 };
 
 const logout = async(req, res) => {
+	return res.status(200).json({message: "Logout successful"});
 };
 
 module.exports = {signup, login, logout};
