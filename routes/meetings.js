@@ -6,7 +6,7 @@ const User = require('../models/User')
 const authMiddleware = require('../ProtectedRoutes/authMiddleware');
 
 //Create a meeting
-router.post('/create', async (req,res) => {
+router.post('/create', authMiddleware, async (req,res) => {
 	try{
 		const {title, description, startTime, duration, spaceId, userId} = req.body;
 		console.log('Received meeting data:', {title, description, startTime, duration, spaceId, userId});
@@ -38,7 +38,7 @@ router.post('/create', async (req,res) => {
 });
 
 // Get all meetings in a space
-router.get('/space/:spaceId', async (req,res) => {
+router.get('/space/:spaceId', authMiddleware, async (req,res) => {
 	try{
 		const meetings = await Meeting.find({spaceId: req.params.spaceId})
 			.populate('createdBy','username')
@@ -52,7 +52,7 @@ router.get('/space/:spaceId', async (req,res) => {
 });
 
 // Delete a meeting (only by the creator)
-router.delete('/:id', async (req,res) => {
+router.delete('/:id', authMiddleware, async (req,res) => {
 	try{
 		const {userId} = req.body;
 		const meeting = await Meeting.findById(req.params.id);
@@ -75,7 +75,7 @@ router.delete('/:id', async (req,res) => {
 	}
 });
 
-router.get('/user/:userId', async (req,res) => {
+router.get('/user/:userId', authMiddleware, async (req,res) => {
 	try{
 		const user = await User.findById(req.params.userId).populate('spaces');
 		if (!user){

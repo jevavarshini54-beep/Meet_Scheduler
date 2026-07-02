@@ -4,7 +4,7 @@ const authMiddleware = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
 
 	if (!token) {
-		return res.status(400).json({message: "Token not found"});
+		return res.status(401).json({message: "Token not found"});
 	}
 
 	try {
@@ -14,7 +14,7 @@ const authMiddleware = (req, res, next) => {
 	}
 
 	catch {
-		return res.status(400).json({message: "Invalid token"});
+		return res.status(401).json({message: "Invalid token"});
 	}
 }
 

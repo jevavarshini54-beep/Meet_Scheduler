@@ -5,7 +5,7 @@ const User = require('../models/User');
 const authMiddleware = require('../ProtectedRoutes/authMiddleware');
 
 //creating a new meet-space
-router.post('/create', async (req,res) => {
+router.post('/create', authMiddleware, async (req,res) => {
 	try{
 		const {name,userId} = req.body;
 		if (!name || !userId){
@@ -31,7 +31,7 @@ router.post('/create', async (req,res) => {
 })
 
 //Joining a meet-space
-router.post('/join_meetspace', async (req,res) => {
+router.post('/join_meetspace', authMiddleware, async (req,res) => {
 	try{
 		const {userId, code} = req.body;
 		if (!code || !userId){
@@ -64,7 +64,7 @@ router.post('/join_meetspace', async (req,res) => {
 });
 
 // all spaces of one user
-router.get('/user/:userId', async (req,res) => {
+router.get('/user/:userId', authMiddleware, async (req,res) => {
   try {
     const user = await User.findById(req.params.userId)
       .populate('spaces');
@@ -83,7 +83,7 @@ router.get('/user/:userId', async (req,res) => {
 });
 
 //one space with all its members
-router.get('/:id', async (req,res) => {
+router.get('/:id', authMiddleware, async (req,res) => {
 	try{
 		const space = await Space.findById(req.params.id)
 			.populate('members','username')
